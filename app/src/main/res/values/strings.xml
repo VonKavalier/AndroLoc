@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">AndroLoc</string>
+
+    <!-- Boutons -->
+    <string name="travaux_bouton">Travaux</string>
+    <string name="recherche_bouton">Rechercher aux alentours</string>
+    <string name="villes_bouton">Villes principales</string>
+    <string name="quitter_bouton">Quitter</string>
 </resources>
