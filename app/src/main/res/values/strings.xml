@@ -6,4 +6,10 @@
     <string name="recherche_bouton">Rechercher aux alentours</string>
     <string name="villes_bouton">Villes principales</string>
     <string name="quitter_bouton">Quitter</string>
+
+    <!-- Descriptions -->
+    <string name="travaux_bouton_description">icone travaux</string>
+    <string name="recherche_bouton_description">icone recherche</string>
+    <string name="villes_bouton_description">icone villes principales</string>
+    <string name="quitter_bouton_description">icone quitter</string>
 </resources>

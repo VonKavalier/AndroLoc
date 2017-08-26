@@ -30,11 +30,11 @@
                     android:text="@string/travaux_bouton"
                     android:textSize="18sp"
                     android:gravity="center|bottom"
-                    android:singleLine="false"
                     android:paddingBottom="10dp"/>
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/travaux_bouton_description"
                     android:src="@drawable/travaux"
                     android:layout_centerInParent="true"/>
             </RelativeLayout>
@@ -50,11 +50,11 @@
                     android:text="@string/recherche_bouton"
                     android:textSize="18sp"
                     android:gravity="center|bottom"
-                    android:singleLine="false"
                     android:paddingBottom="10dp"/>
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/recherche_bouton_description"
                     android:src="@drawable/recherche"
                     android:layout_centerInParent="true"/>
             </RelativeLayout>
@@ -82,7 +82,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/villes"
-                    android:layout_centerInParent="true"/>
+                    android:contentDescription="@string/villes_bouton_description"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true" />
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="0dp"
@@ -100,6 +102,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/quitter_bouton_description"
                     android:src="@drawable/quitter"
                     android:layout_centerInParent="true"/>
             </RelativeLayout>
