@@ -25,7 +25,7 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/button1"
+                    android:id="@+id/bouton_travaux"
                     android:background="@color/bgBoutons"
                     android:text="@string/travaux_bouton"
                     android:textSize="18sp"
@@ -45,7 +45,7 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/button2"
+                    android:id="@+id/bouton_recherche"
                     android:background="@color/bgBoutons"
                     android:text="@string/recherche_bouton"
                     android:textSize="18sp"
@@ -72,7 +72,7 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/button3"
+                    android:id="@+id/bouton_villes"
                     android:background="@color/bgBoutons"
                     android:text="@string/villes_bouton"
                     android:textSize="18sp"
@@ -93,7 +93,7 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/button4"
+                    android:id="@+id/bouton_quitter"
                     android:background="@color/bgBoutons"
                     android:text="@string/quitter_bouton"
                     android:textSize="18sp"
