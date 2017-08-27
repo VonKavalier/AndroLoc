@@ -12,4 +12,6 @@
     <string name="recherche_bouton_description">icone recherche</string>
     <string name="villes_bouton_description">icone villes principales</string>
     <string name="quitter_bouton_description">icone quitter</string>
+
+    <!-- Villes -->
 </resources>
