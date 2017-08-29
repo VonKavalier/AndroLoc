@@ -18,6 +18,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button bouton_villes = (Button)findViewById(R.id.bouton_villes);
         bouton_villes.setOnClickListener(bVillesListener);
+
+        Button bouton_travaux = (Button)findViewById(R.id.bouton_travaux);
+        bouton_travaux.setOnClickListener(bTravauxListener);
     }
 
     private View.OnClickListener bQuitterListener = new View.OnClickListener() {
@@ -30,6 +33,13 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             Intent villes_intent = new Intent(getApplicationContext(), VillesActivity.class);
             startActivity(villes_intent);
+        }
+    };
+
+    private View.OnClickListener bTravauxListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            Intent travaux_intent = new Intent(getApplicationContext(), TravauxActivity.class);
+            startActivity(travaux_intent);
         }
     };
 }
