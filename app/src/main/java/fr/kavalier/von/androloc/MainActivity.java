@@ -21,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button bouton_travaux = (Button)findViewById(R.id.bouton_travaux);
         bouton_travaux.setOnClickListener(bTravauxListener);
+
+        Button bouton_recherche = (Button)findViewById(R.id.bouton_recherche);
+        bouton_recherche.setOnClickListener(bRechercheListener);
     }
 
     private View.OnClickListener bQuitterListener = new View.OnClickListener() {
@@ -40,6 +43,13 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             Intent travaux_intent = new Intent(getApplicationContext(), TravauxActivity.class);
             startActivity(travaux_intent);
+        }
+    };
+
+    private View.OnClickListener bRechercheListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            Intent recherche_intent = new Intent(getApplicationContext(), RechercheActivity.class);
+            startActivity(recherche_intent);
         }
     };
 }
