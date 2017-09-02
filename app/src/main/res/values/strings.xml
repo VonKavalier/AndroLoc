@@ -14,6 +14,9 @@
     <string name="quitter_bouton_description">icone quitter</string>
 
     <!-- Villes -->
+    <string name="alert_ville_choisie">Que recherchez-vous ?</string>
+    <string name="button_travaux">Voir les travaux</string>
+    <string name="button_recherche">Voir les bâtiments utiles</string>
 
     <!-- Recherche -->
     <string name="alert_location_settings_title">Activer Localisation</string>

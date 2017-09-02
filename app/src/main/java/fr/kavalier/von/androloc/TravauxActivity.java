@@ -1,63 +1,99 @@
 package fr.kavalier.von.androloc;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
+import android.location.LocationManager;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import android.os.Bundle;
+import com.mapquest.mapping.constants.Style;
+import com.mapquest.mapping.maps.OnMapReadyCallback;
+import com.mapquest.mapping.maps.MapboxMap;
 import com.mapquest.mapping.MapQuestAccountManager;
-
-/**
- * Created by Geoffrey on 28/08/2017.
- */
+import com.mapquest.mapping.maps.MapView;
 
 public class TravauxActivity extends AppCompatActivity {
 
-    private MapboxMap boxmap_travaux;
-    private MapView map_travaux;
+    private MapView mMapView;
+    private MapboxMap mMapboxMap;
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MapQuestAccountManager.start(getApplicationContext());
+
+        this.setTitle("Travaux en temps réel");
+
         Intent intent = getIntent();
-//        MapQuestAccountManager.start(getApplicationContext());
 
-        setContentView(R.layout.activity_travaux);
+        setContentView(R.layout.activity_recherche);
 
- /*       map_travaux = (MapView) findViewById((R.id.mapquestMapView));
-        map_travaux.onCreate(savedInstanceState);
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
-        map_travaux.getMapAsync(new OnMapReadyCallback() {
+        mMapView = (MapView) findViewById(R.id.search_view);
+
+        checkLocation();
+
+        mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
-                boxmap_travaux = mapboxMap;
+                mMapboxMap = mapboxMap;
+                mMapView.setStyleUrl(Style.MAPQUEST_STREETS);
             }
-        });*/
+        });
+
+        mMapView.onCreate(savedInstanceState);
     }
-/*
-    @Override
-    public void onResume(){
-        super.onResume();
-        map_travaux.onResume();
+
+    private boolean checkLocation() {
+        if(!isLocationEnabled())
+            showAlert();
+        return isLocationEnabled();
+    }
+
+    private void showAlert() {
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle(R.string.alert_location_settings_title)
+                .setMessage(getString(R.string.alert_location_settings1) + "\n" +
+                        getString(R.string.alert_location_settings2))
+                .setPositiveButton(R.string.button_location_settings, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                        Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(myIntent);
+                    }
+                })
+                .setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                        Intent main_intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(main_intent);
+                    }
+                });
+        dialog.show();
+    }
+
+    private boolean isLocationEnabled() {
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
     @Override
-    public void onPause(){
-        super.onPause();
-        map_travaux.onPause();
-    }
+    public void onResume()
+    { super.onResume(); mMapView.onResume(); }
 
     @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        map_travaux.onDestroy();
-    }
+    public void onPause()
+    { super.onPause(); mMapView.onPause(); }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState){
-        super.onSaveInstanceState(outState);
-        map_travaux.onSaveInstanceState(outState);
-    }*/
+    protected void onDestroy()
+    { super.onDestroy(); mMapView.onDestroy(); }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    { super.onSaveInstanceState(outState); mMapView.onSaveInstanceState(outState); }
 }

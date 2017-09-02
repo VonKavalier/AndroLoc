@@ -1,6 +1,9 @@
 package fr.kavalier.von.androloc;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +24,8 @@ public class VillesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_villes);
         Intent intent = getIntent();
+
+        this.setTitle("Villes principales");
 
         final ListView listView = (ListView) findViewById(R.id.list_villes);
         String[] villes = new String[] { "Seattle", "Portland", "San Francisco", "San Jose", "Los Angeles", "San Diego",
@@ -61,8 +66,30 @@ public class VillesActivity extends AppCompatActivity {
                         "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
                         .show();
 
+                showAlert();
+
             }
 
         });
+    }
+
+    private void showAlert() {
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle(R.string.alert_ville_choisie)
+                .setPositiveButton(R.string.button_travaux, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                        Intent travaux_intent = new Intent(getApplicationContext(), TravauxActivity.class);
+                        startActivity(travaux_intent);
+                    }
+                })
+                .setNegativeButton(R.string.button_recherche, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                        Intent recherche_intent = new Intent(getApplicationContext(), RechercheActivity.class);
+                        startActivity(recherche_intent);
+                    }
+                });
+        dialog.show();
     }
 }
