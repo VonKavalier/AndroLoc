@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">AndroLoc</string>
 
-    <!-- Boutons -->
+    <!-- Boutons Accueil -->
     <string name="travaux_bouton">Travaux</string>
     <string name="recherche_bouton">Rechercher aux alentours</string>
     <string name="villes_bouton">Villes principales</string>
@@ -14,4 +14,13 @@
     <string name="quitter_bouton_description">icone quitter</string>
 
     <!-- Villes -->
+
+    <!-- Recherche -->
+    <string name="alert_location_settings_title">Activer Localisation</string>
+    <string name="alert_location_settings1">Les paramètres de localisation ne sont pas activés.</string>
+    <string name="alert_location_settings2">Activez-les pour utiliser cette application.</string>
+    <string name="button_location_settings">Paramètres de Localisation</string>
+
+    <!-- Divers -->
+    <string name="button_cancel">Annuler</string>
 </resources>

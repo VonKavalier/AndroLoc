@@ -13,6 +13,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = getIntent();
+
         Button bouton_quitter = (Button)findViewById(R.id.bouton_quitter);
         bouton_quitter.setOnClickListener(bQuitterListener);
 
