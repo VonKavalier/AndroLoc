@@ -66,7 +66,7 @@ public class VillesActivity extends AppCompatActivity {
                                         dallas, houston, jackson, memphis, nashville, charlotte, indianapolis, chicago,
                                         colombus, milwaukee, detroit, washington, baltimore, philadelphie, new_york, boston};
 
-        ArrayList<Ville> villes = new ArrayList<>();
+        final ArrayList<Ville> villes = new ArrayList<>();
 
         for (Ville ville: list) {
             villes.add(ville);
@@ -115,28 +115,30 @@ public class VillesActivity extends AppCompatActivity {
                         "Position :"+itemPosition+"  ListItem : " + itemValue, Toast.LENGTH_LONG)
                         .show();
 
-                showAlert();
+                showAlert(villes.get(itemPosition));
 
             }
 
         });
     }
 
-    private void showAlert() {
+    private void showAlert(final Ville the_ville) {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+        //Create the bundle
+        final Bundle bundle = new Bundle();
+
+        bundle.putDouble("latitude", the_ville.getLatitude());
+        bundle.putDouble("longitude", the_ville.getLongitude());
+
         dialog.setTitle(R.string.alert_ville_choisie)
                 .setPositiveButton(R.string.button_travaux, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                         Intent travaux_intent = new Intent(getApplicationContext(), TravauxActivity.class);
 
-                        /*//Create the bundle
-                        Bundle bundle = new Bundle();
-
-                        bundle.putString(, );
-
                         //Add the bundle to the intent
-                        travaux_intent.putExtras(bundle);*/
+                        travaux_intent.putExtras(bundle);
 
                         //Fire that second activity
                         startActivity(travaux_intent);
@@ -146,6 +148,9 @@ public class VillesActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                         Intent recherche_intent = new Intent(getApplicationContext(), RechercheActivity.class);
+
+                        recherche_intent.putExtras(bundle);
+
                         startActivity(recherche_intent);
                     }
                 });

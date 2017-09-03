@@ -8,6 +8,9 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapquest.mapping.constants.Style;
 import com.mapquest.mapping.maps.OnMapReadyCallback;
 import com.mapquest.mapping.maps.MapboxMap;
@@ -27,7 +30,10 @@ public class TravauxActivity extends AppCompatActivity {
 
         this.setTitle("Travaux en temps réel");
 
-        Intent intent = getIntent();
+       final  Intent intent = getIntent();
+
+        //Get the bundle
+        final Bundle bundle = getIntent().getExtras();
 
         setContentView(R.layout.activity_recherche);
 
@@ -41,7 +47,11 @@ public class TravauxActivity extends AppCompatActivity {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
                 mMapboxMap = mapboxMap;
-                mMapView.setStyleUrl(Style.MAPQUEST_STREETS);
+                if (intent.hasExtra("latitude") && intent.hasExtra("longitude")) {
+                    mMapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(bundle.getDouble("latitude"), bundle.getDouble("longitude")), 11));
+                } else{
+                    mMapView.setStyleUrl(Style.MAPQUEST_STREETS);
+                }
             }
         });
 
