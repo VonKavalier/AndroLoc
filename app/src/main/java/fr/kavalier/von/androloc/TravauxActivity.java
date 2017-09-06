@@ -57,6 +57,7 @@ public class TravauxActivity extends AppCompatActivity {
             public void onMapReady(MapboxMap mapboxMap) {
                 mMapboxMap = mapboxMap;
                 if (intent.hasExtra("latitude") && intent.hasExtra("longitude")) {
+                    request_lieux(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
                     mMapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(bundle.getDouble("latitude"), bundle.getDouble("longitude")), 11));
                 } else{
                     mMapView.setStyleUrl(Style.MAPQUEST_STREETS);
@@ -66,9 +67,6 @@ public class TravauxActivity extends AppCompatActivity {
 
         mMapView.onCreate(savedInstanceState);
 
-        if (intent.hasExtra("latitude") && intent.hasExtra("longitude")) {
-            request_lieux(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
-        }
     }
 
     private void request_lieux(double latitude, double longitude) {

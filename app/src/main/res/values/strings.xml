@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">AndroLoc</string>
 
+    <string name="mapquest_key">Nn6yCN1U2vwW4rLQ1XtlNz9qf96cPh7n</string>
+
     <!-- Boutons Accueil -->
     <string name="travaux_bouton">Travaux</string>
     <string name="recherche_bouton">Rechercher aux alentours</string>

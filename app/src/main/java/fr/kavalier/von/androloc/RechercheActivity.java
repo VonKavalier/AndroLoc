@@ -4,11 +4,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapquest.mapping.constants.Style;
@@ -17,11 +22,36 @@ import com.mapquest.mapping.maps.MapboxMap;
 import com.mapquest.mapping.MapQuestAccountManager;
 import com.mapquest.mapping.maps.MapView;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+
 public class RechercheActivity extends AppCompatActivity {
 
     private MapView mMapView;
     private MapboxMap mMapboxMap;
     LocationManager locationManager;
+    private Bundle bundle;
+
+    // Directions API URL query
+    private String search_api_request_url;
+
+    // Mapquest API KEY
+    private String MAPQUEST_API_KEY;
+
+    // TAG
+    private static final String TAG = "MapFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +62,9 @@ public class RechercheActivity extends AppCompatActivity {
         final Intent intent = getIntent();
 
         //Get the bundle
-        final Bundle bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();
 
+        MAPQUEST_API_KEY = getResources().getString(R.string.mapquest_key);
 
         setContentView(R.layout.activity_recherche);
 
@@ -48,7 +79,10 @@ public class RechercheActivity extends AppCompatActivity {
             public void onMapReady(MapboxMap mapboxMap) {
                 mMapboxMap = mapboxMap;
                 if (intent.hasExtra("latitude") && intent.hasExtra("longitude")) {
+                    RetrieveSearchTask rst = new RetrieveSearchTask();
+                    rst.execute();
                     mMapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(bundle.getDouble("latitude"), bundle.getDouble("longitude")), 11));
+                    // request_lieux(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
                 } else{
                     mMapView.setStyleUrl(Style.MAPQUEST_STREETS);
                 }
@@ -90,6 +124,72 @@ public class RechercheActivity extends AppCompatActivity {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
+
+    private void request_lieux(double latitude, double longitude){
+        search_api_request_url = "http://www.mapquestapi.com/search/v2/radius?key=" + MAPQUEST_API_KEY +
+                "&maxMatches=15&shapePoints=" + latitude + "," + longitude;
+
+        Log.i(TAG, "DIRECTIONS API URL: " + search_api_request_url);
+    }
+
+    class RetrieveSearchTask extends AsyncTask<Void, Void, String> {
+
+        private Exception exception;
+        private TextView test;
+
+        protected void onPreExecute() {
+            test = (TextView) findViewById(R.id.test);
+            test.setText("");
+        }
+
+        protected String doInBackground(Void... urls) {
+            // Do some validation here
+
+            Log.i("TEST", "Ceci est un test, on est dans la classe");
+
+            try {
+                URL url = new URL("http://www.mapquestapi.com/search/v2/search?key=" + MAPQUEST_API_KEY +
+                        "&maxMatches=20&shapePoints=" + bundle.getDouble("latitude") + "," + bundle.getDouble("longitude"));
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                Log.i("TEST", url.getPath());
+                try {
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
+                    }
+                    bufferedReader.close();
+                    return stringBuilder.toString();
+                }
+                finally{
+                    urlConnection.disconnect();
+                }
+            }
+            catch(Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String response) {
+            if(response == null) {
+                response = "THERE WAS AN ERROR";
+            }
+            Log.i("INFO", response);
+            test.setText(response);
+        }
+    }
+
+    private void addMarker(MapboxMap mapboxMap, double latitude, double longitude, String title, String snippet) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(new LatLng(latitude, longitude));
+        markerOptions.title(title);
+        markerOptions.snippet(snippet);
+        mapboxMap.addMarker(markerOptions);
+    }
+
+    //TODO: Voir JSONArray et faire une boucle sur le tableau de lieu et créer les pointeurs
 
     @Override
     public void onResume()
