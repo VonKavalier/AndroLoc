@@ -4,24 +4,33 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
 
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapquest.mapping.constants.Style;
-import com.mapquest.mapping.maps.OnMapReadyCallback;
-import com.mapquest.mapping.maps.MapboxMap;
 import com.mapquest.mapping.MapQuestAccountManager;
+import com.mapquest.mapping.constants.Style;
 import com.mapquest.mapping.maps.MapView;
+import com.mapquest.mapping.maps.MapboxMap;
+import com.mapquest.mapping.maps.OnMapReadyCallback;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class TravauxActivity extends AppCompatActivity {
 
     private MapView mMapView;
     private MapboxMap mMapboxMap;
     LocationManager locationManager;
+    private static final String TAG = "LogTravaux";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +65,20 @@ public class TravauxActivity extends AppCompatActivity {
         });
 
         mMapView.onCreate(savedInstanceState);
+
+        if (intent.hasExtra("latitude") && intent.hasExtra("longitude")) {
+            request_lieux(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
+        }
+    }
+
+    private void request_lieux(double latitude, double longitude) {
+        double i = latitude + 1;
+        double y = longitude + 1;
+        double iy = latitude - 2;
+        double yi = longitude - 2;
+        String search_api_request_url = "http://www.mapquestapi.com/traffic/v2/incidents?key=Nn6yCN1U2vwW4rLQ1XtlNz9qf96cPh7n&boundingBox=" + i + "," + y + "," + iy + "," + yi + "&filters=incidents";
+
+        Log.i(TAG, "DIRECTIONS API URL: " + search_api_request_url);
     }
 
     private boolean checkLocation() {
@@ -90,6 +113,7 @@ public class TravauxActivity extends AppCompatActivity {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
+
 
     @Override
     public void onResume()
