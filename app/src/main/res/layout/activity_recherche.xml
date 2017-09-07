@@ -13,10 +13,4 @@
         app:mapquest_app_key="@string/mapquest_key"
         />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/test"/>
-
 </android.support.constraint.ConstraintLayout>

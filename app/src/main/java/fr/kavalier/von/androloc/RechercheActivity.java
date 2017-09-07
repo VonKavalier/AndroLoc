@@ -29,13 +29,16 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 public class RechercheActivity extends AppCompatActivity {
 
@@ -135,23 +138,18 @@ public class RechercheActivity extends AppCompatActivity {
     class RetrieveSearchTask extends AsyncTask<Void, Void, String> {
 
         private Exception exception;
-        private TextView test;
 
         protected void onPreExecute() {
-            test = (TextView) findViewById(R.id.test);
-            test.setText("");
         }
 
         protected String doInBackground(Void... urls) {
             // Do some validation here
 
-            Log.i("TEST", "Ceci est un test, on est dans la classe");
-
             try {
                 URL url = new URL("http://www.mapquestapi.com/search/v2/search?key=" + MAPQUEST_API_KEY +
-                        "&maxMatches=20&shapePoints=" + bundle.getDouble("latitude") + "," + bundle.getDouble("longitude"));
+                        "&maxMatches=100&shapePoints=" + bundle.getDouble("latitude") + "," + bundle.getDouble("longitude")+"&radius=3");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                Log.i("TEST", url.getPath());
+                Log.i("TEST", url.toString());
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                     StringBuilder stringBuilder = new StringBuilder();
@@ -177,15 +175,27 @@ public class RechercheActivity extends AppCompatActivity {
                 response = "THERE WAS AN ERROR";
             }
             Log.i("INFO", response);
-            test.setText(response);
+            try {
+                JSONObject o = new JSONObject(response);
+                JSONArray a = o.getJSONArray("searchResults");
+                for (int i = 0; i < a.length(); i++) {
+                    o = a.getJSONObject(i);
+                    fields = (JSONArray) o.get("shapePoints");
+                    double lat = (double) fields.get(0);
+                    double lon = (double) fields.get(1);
+                    String name = o.get("name").toString();
+                    addMarker(mMapboxMap, lat, lon, name);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void addMarker(MapboxMap mapboxMap, double latitude, double longitude, String title, String snippet) {
+    private void addMarker(MapboxMap mapboxMap, double latitude, double longitude, String title) {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(new LatLng(latitude, longitude));
         markerOptions.title(title);
-        markerOptions.snippet(snippet);
         mapboxMap.addMarker(markerOptions);
     }
 
