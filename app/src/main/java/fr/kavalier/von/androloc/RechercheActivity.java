@@ -179,6 +179,7 @@ public class RechercheActivity extends AppCompatActivity {
                 JSONObject o = new JSONObject(response);
                 JSONArray a = o.getJSONArray("searchResults");
                 for (int i = 0; i < a.length(); i++) {
+                    JSONArray fields = null;
                     o = a.getJSONObject(i);
                     fields = (JSONArray) o.get("shapePoints");
                     double lat = (double) fields.get(0);
